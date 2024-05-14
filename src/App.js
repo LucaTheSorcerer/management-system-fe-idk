@@ -1,25 +1,76 @@
-import logo from './logo.svg';
+// import './App.css';
+// import {Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+// import Authentication from './pages/Authentication';
+// import {AuthContext} from './context/auth_context/AuthProvider'
+// import {useContext, useEffect} from 'react';
+
+
+// function App() {
+//     const {auth} = useContext(AuthContext);
+//     const navigate = useNavigate();
+//     const location = useLocation();
+
+//     console.log(auth);
+
+//     useEffect(() => {
+//         // If the user is not authenticated, navigate to the Authentication page
+//         // if (!auth || !auth.isAuthenticated && location.pathname !== '/ForgotPassword') {
+//         if (!auth || !auth.isAuthenticated) {
+
+//             navigate('/Authentication');
+//         }
+//     }, [auth, navigate]);
+
+//     return (
+//         <div className="App">
+//             <Routes>
+//                 <Route path="/Authentication" element={<Authentication/>}/>
+//                 {auth && auth.isAuthenticated && (
+//                 <>
+//                 </>
+//                 )}
+//             </Routes>
+//         </div>
+//     );
+// }
+
+// export default App;
 import './App.css';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import Authentication from './pages/Authentication';
+import Home from './pages/Home';
+import { AuthContext } from './context/auth_context/AuthProvider';
+import React, { useContext, useEffect } from 'react';
 
 function App() {
+  const { auth } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!auth || !auth.isAuthenticated) {
+      navigate('/Authentication');
+    }
+  }, [auth, navigate]);
+
+  useEffect(() => {
+    if (!auth && !auth.isAuthenticated) {
+      navigate('/Authentication');
+    }
+  }, [auth, location.pathname, navigate]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Routes>
+            <Route path="/Authentication" element={<Authentication/>}/>
+            {auth && auth.isAuthenticated && (
+            <>
+                <Route path="/" element={<Home/>}/>
+            </>
+            )}
+        </Routes>
     </div>
-  );
+);
 }
 
 export default App;
